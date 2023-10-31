@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class PlayerInput : MonoBehaviour
 {
-    static InputManager _instance = default;
-    public static InputManager Instance
+    static PlayerInput _instance = default;
+    public static PlayerInput Instance
     {
         get
         {
             if (!_instance) //nullならインスタンス化する
             {
                 var obj = new GameObject("InputManager");
-                var input = obj.AddComponent<InputManager>();
+                var input = obj.AddComponent<PlayerInput>();
                 _instance = input;
                 DontDestroyOnLoad(obj);
             }
