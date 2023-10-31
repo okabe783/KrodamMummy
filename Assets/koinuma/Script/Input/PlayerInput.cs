@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class PlayerInput : MonoBehaviour
 {
-    static InputManager _instance = default;
-    public static InputManager Instance
+    static PlayerInput _instance = default;
+    public static PlayerInput Instance
     {
         get
         {
             if (!_instance) //nullならインスタンス化する
             {
                 var obj = new GameObject("InputManager");
-                var input = obj.AddComponent<InputManager>();
+                var input = obj.AddComponent<PlayerInput>();
                 _instance = input;
                 DontDestroyOnLoad(obj);
             }
@@ -51,6 +51,7 @@ public class InputManager : MonoBehaviour
         _gameInput.InGame.Move.canceled += OnMove;
         _gameInput.InGame.Jump.started += OnJump;
         _gameInput.InGame.Attack.started += OnAttack;
+        _gameInput.InGame.Attack.canceled += OnCancelAttack;
     }
 
     #region 各アクションをセット
@@ -66,8 +67,12 @@ public class InputManager : MonoBehaviour
     {
         _inputDic[InputType.Attack]?.Invoke();
     }
+    void OnCancelAttack(InputAction.CallbackContext context)
+    {
+        _inputDic[InputType.CancelAttack]?.Invoke();
+    }
     #endregion
-    
+
     /// <summary>コールバックに登録するActionをセット出来る</summary>
     /// <param name="inputType"></param><param name="action"></param>
     public void SetInput(InputType inputType, Action action)
@@ -81,5 +86,6 @@ public enum InputType
 {
     Move,
     Jump,
-    Attack
+    Attack,
+    CancelAttack
 }
