@@ -51,6 +51,7 @@ public class PlayerInput : MonoBehaviour
         _gameInput.InGame.Move.canceled += OnMove;
         _gameInput.InGame.Jump.started += OnJump;
         _gameInput.InGame.Attack.started += OnAttack;
+        _gameInput.InGame.Attack.canceled += OnCancelAttack;
     }
 
     #region 各アクションをセット
@@ -66,8 +67,12 @@ public class PlayerInput : MonoBehaviour
     {
         _inputDic[InputType.Attack]?.Invoke();
     }
+    void OnCancelAttack(InputAction.CallbackContext context)
+    {
+        _inputDic[InputType.CancelAttack]?.Invoke();
+    }
     #endregion
-    
+
     /// <summary>コールバックに登録するActionをセット出来る</summary>
     /// <param name="inputType"></param><param name="action"></param>
     public void SetInput(InputType inputType, Action action)
@@ -81,5 +86,6 @@ public enum InputType
 {
     Move,
     Jump,
-    Attack
+    Attack,
+    CancelAttack
 }
