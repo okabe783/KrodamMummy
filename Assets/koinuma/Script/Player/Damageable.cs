@@ -11,29 +11,29 @@ public partial class Damageable : MonoBehaviour
     [SerializeField, Tooltip("無敵時間が切れたとき")] UnityEvent OnBecomeVulnerable;
 
     /// <summary>無敵時間であるか</summary>
-    public bool isInvulnerable { get; set; }
+    public bool IsInvulnerable { get; set; }
     /// <summary>現在HP</summary>
-    public int currentHitPoints { get; private set; }
+    public int CurrentHitPoints { get; private set; }
 
+    /// <summary>現在の無敵時間</summary>
+    protected float _currentInvulnerabiltyTime;
     /// <summary>無敵時間タイマー用</summary>
-    protected float m_timeSinceLastHit = 0.0f;
-
-    System.Action schedule;
+    protected float m_timeSinceLastHit = 0;
 
     void Start()
     {
-        ResetDamage();
+        ResetDamage(); // HP初期化
     }
 
     void Update()
     {
-        if (isInvulnerable)
+        if (IsInvulnerable) // 無敵時間タイマー
         {
             m_timeSinceLastHit += Time.deltaTime;
-            if (m_timeSinceLastHit > _invulnerabiltyTime)
+            if (m_timeSinceLastHit > _currentInvulnerabiltyTime)
             {
-                m_timeSinceLastHit = 0.0f;
-                isInvulnerable = false;
+                m_timeSinceLastHit = 0;
+                IsInvulnerable = false;
                 OnBecomeVulnerable.Invoke();
             }
         }
@@ -41,37 +41,36 @@ public partial class Damageable : MonoBehaviour
 
     public void ResetDamage()
     {
-        currentHitPoints = _maxHp;
-        isInvulnerable = false;
-        m_timeSinceLastHit = 0.0f;
+        CurrentHitPoints = _maxHp;
+        IsInvulnerable = false;
+        m_timeSinceLastHit = 0;
+        OnReceiveDamage.Invoke();
     }
 
+    /// <summary>ダメージを受ける回復する</summary>
+    /// <param name="damage"></param>
     public void ApplyDamage(int damage)
     {
-        if (currentHitPoints <= 0)
-        {
-            return;
-        }
+        if (CurrentHitPoints <= 0) return;
 
-        if (isInvulnerable)
+        if (IsInvulnerable)
         {
             OnHitWhileInvulnerable.Invoke();
             return;
         }
 
-        isInvulnerable = true;
-        currentHitPoints -= damage;
+        SetInvulnerable(_invulnerabiltyTime); // ダメージを受けると無敵時間となる
+        CurrentHitPoints -= damage;
 
-        if (currentHitPoints <= 0) schedule += OnDeath.Invoke;
+        if (CurrentHitPoints <= 0) OnDeath.Invoke();
         else OnReceiveDamage.Invoke();
     }
 
-    void LateUpdate()
+    /// <summary>指定時間無敵時間にする</summary>
+    /// <param name="sec"></param>
+    public void SetInvulnerable(float sec)
     {
-        if (schedule != null)
-        {
-            schedule();
-            schedule = null;
-        }
+        _currentInvulnerabiltyTime = sec;
+        IsInvulnerable = true;
     }
 }
