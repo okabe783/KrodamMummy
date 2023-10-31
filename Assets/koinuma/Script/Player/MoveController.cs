@@ -30,7 +30,7 @@ public class MoveController : MonoBehaviour
     void Move()
     {
         // 水平移動処理
-        Vector2 moveDir = InputManager.Instance.MoveVector;
+        Vector2 moveDir = PlayerInput.Instance.MoveVector;
         Vector3 dir = new Vector3(moveDir.x, 0, moveDir.y); // 移動方向
         dir = Camera.main.transform.TransformDirection(dir); //カメラ基準のベクトルに直す
         dir.y = 0;
@@ -101,6 +101,6 @@ public class MoveController : MonoBehaviour
 
     private void OnEnable()
     {
-        InputManager.Instance.SetInput(InputType.Jump, Jump); // アクションをセット
+        PlayerInput.Instance.SetInput(InputType.Jump, Jump); // アクションをセット
     }
 }
