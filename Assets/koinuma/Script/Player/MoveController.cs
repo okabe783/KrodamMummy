@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,26 +10,27 @@ public class MoveController : MonoBehaviour
     [SerializeField] float _jumpPower;
     /// <summary>空中での方向転換のスピード</summary>
     [SerializeField] float _turnSpeed = 3;
+    PlayerManager _playerManager;
     Rigidbody _rb;
+    Animator _animator;
     bool _isGround;
-    /// <summary>接地中のCollision</summary>
-    List<Collider> _onCollisions = new List<Collider>();
+    bool _jumped = false;
     Vector3 _planeNormalVector;
 
     void Start()
     {
+        _playerManager = GetComponent<PlayerManager> ();
         _rb = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
         // rbのxとzをfreez rotation
-        _rb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
-    }
-
-    private void Update()
-    {
-        Move();
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
+        InGameManager.Instance.OnUpdateAction += Move;
+        PlayerInput.Instance.SetInput(InputType.Jump, Jump);
     }
 
     void Move()
     {
+        IsGroundUpdate();
         // 水平移動処理
         Vector2 moveDir = PlayerInput.Instance.MoveVector;
         Vector3 dir = new Vector3(moveDir.x, 0, moveDir.y); // 移動方向
@@ -63,15 +65,45 @@ public class MoveController : MonoBehaviour
             Vector3 onPlaneVelo = Vector3.ProjectOnPlane(velo, _planeNormalVector);
             _rb.velocity = onPlaneVelo; // 接地中はvelocityを書き換える
         }
+
+        // キャラクターを移動方向に向ける(移動方向ではなく独自に計算してる)
+        if (PlayerInput.Instance.MoveVector.magnitude != 0) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * _turnSpeed * 5);
+
+        SetAnimation();
     }
 
     void Jump()
     {
         if (!_isGround) return; // 接地してなかったらreturn
+        _isGround = false;
         Vector3 moveVelo = _rb.velocity;
         moveVelo.y = _jumpPower;
         _rb.velocity = moveVelo;
-        _isGround = false;
+        _animator.SetTrigger("Jumped");
+        StartCoroutine(Jumped());
+    }
+
+    /// <summary>ジャンプ直後はisGroundをtrueにさせないため</summary>
+    IEnumerator Jumped()
+    {
+        _jumped = true;
+        yield return new WaitForSeconds(0.1f);
+        _jumped = false;
+    }
+
+    void IsGroundUpdate()
+    {
+        if (_jumped) return; // ジャンプした直後は更新しない
+        if (Physics.CheckSphere(transform.position + Vector3.up * 0.749f, 0.75f, 1 << 3)) _isGround = true;
+        else _isGround = false;
+    }
+
+    /// <summary>animation paramaterをセット</summary>
+    void SetAnimation()
+    {
+        _animator.SetBool("Moving", PlayerInput.Instance.MoveVector != Vector2.zero);
+        _animator.SetFloat("Velocity", _rb.velocity.magnitude / 10);
+        _animator.SetFloat("FallSpeed", _rb.velocity.y);
     }
 
     private void OnCollisionStay(Collision collision)
@@ -80,27 +112,12 @@ public class MoveController : MonoBehaviour
         if (angle < 45)
         {
             _planeNormalVector = collision.contacts[0].normal;
-        }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (Vector3.Angle(Vector3.up, collision.contacts[0].normal) < 45)
-        {
-            _onCollisions.Add(collision.collider);
-            _isGround = true;
-        }
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-        if (_onCollisions.Contains(collision.collider))
-        {
-            _onCollisions.Remove(collision.collider);
-            if (_onCollisions.Count == 0) _isGround = false;
+            _animator.SetTrigger("Landing");
         }
     }
 
-    private void OnEnable()
+    void OnDrawGizmosSelected()
     {
-        PlayerInput.Instance.SetInput(InputType.Jump, Jump); // アクションをセット
+        Gizmos.DrawWireSphere(transform.position + Vector3.up * 0.74f, 0.75f);
     }
 }
