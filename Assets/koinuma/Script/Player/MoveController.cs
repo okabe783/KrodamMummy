@@ -30,6 +30,11 @@ public class MoveController : MonoBehaviour
 
     void Move()
     {
+        if (_playerManager.PlayerState == PlayerState.canneling) // 攻撃中は動かない
+        {
+            _rb.velocity = Vector3.zero;
+            return;
+        }
         IsGroundUpdate();
         // 水平移動処理
         Vector2 moveDir = PlayerInput.Instance.MoveVector;
@@ -74,7 +79,7 @@ public class MoveController : MonoBehaviour
 
     void Jump()
     {
-        if (!_isGround) return; // 接地してなかったらreturn
+        if (!_isGround || _playerManager.PlayerState == PlayerState.canneling) return; // 接地してない又は攻撃中はreturn
         _isGround = false;
         Vector3 moveVelo = _rb.velocity;
         moveVelo.y = _jumpPower;
@@ -93,9 +98,16 @@ public class MoveController : MonoBehaviour
 
     void IsGroundUpdate()
     {
-        if (_jumped) return; // ジャンプした直後は更新しない
-        if (Physics.CheckSphere(transform.position + Vector3.up * 0.749f, 0.75f, 1 << 3)) _isGround = true;
-        else _isGround = false;
+        if (_jumped || !Physics.CheckSphere(transform.position + Vector3.up * 0.749f, 0.749f, 1 << 3))
+        {
+            _isGround = false;
+            _playerManager.PlayerState = PlayerState.air;
+        }
+        else
+        {
+            _isGround = true;
+            _playerManager.PlayerState = PlayerState.nomal;
+        }
     }
 
     /// <summary>animation paramaterをセット</summary>

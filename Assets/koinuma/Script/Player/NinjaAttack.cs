@@ -1,22 +1,23 @@
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 
 public class NinjaAttack : MonoBehaviour
 {
-    [SerializeField] float _cd = 1f;
+    [SerializeField] float _cd = 0.3f;
     bool _isCD = false;
+    PlayerManager _playerManager;
     Animator _animator;
 
     private void Start()
     {
+        _playerManager = GetComponent<PlayerManager>();
         _animator = GetComponent<Animator>();
         PlayerInput.Instance.SetInput(InputType.Attack, OnAttack);
     }
 
     void OnAttack()
     {
-        if (_isCD) return;
+        if (_isCD || _playerManager.PlayerState != PlayerState.nomal) return;
         _animator.SetTrigger("AttackTrigger");
         StartCoroutine(CountCD());
     }
@@ -36,8 +37,10 @@ public class NinjaAttack : MonoBehaviour
     IEnumerator CountCD()
     {
         _isCD = true;
+        _playerManager.PlayerState = PlayerState.canneling;
         yield return new WaitForSeconds(_cd);
         _isCD = false;
+        _playerManager.PlayerState = PlayerState.nomal;
     }
 
     void OnDrawGizmosSelected()
