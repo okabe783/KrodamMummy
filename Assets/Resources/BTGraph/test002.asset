@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9c2b146a2224731b5762c7214d3ecf, type: 3}
+  m_Name: test002
+  m_EditorClassIdentifier: 
+  Nodes:
+  - Guid: 31c536163d6e41fea69b595632d3f7af
+    NodeType: 1
+    Priority: 0
+    Position: {x: -252, y: 312}
+    parameterJson: 
+  - Guid: cc6db23176d04a49ac27171713eebd22
+    NodeType: 4
+    Priority: 0
+    Position: {x: -14, y: 513.5}
+    parameterJson: '{"ParameterList":[]}'
+  - Guid: 5e28b824920b48869d9c553f4cb182a8
+    NodeType: 6
+    Priority: 0
+    Position: {x: 149.5, y: 513.5}
+    parameterJson: '{"ParameterList":[{"Name":"Key","Typename":"","Value":"TargetPoint"},{"Name":"Value","Typename":"","Value":"PointB"}]}'
+  - Guid: 412450511dc641618405a9aac42cd2fc
+    NodeType: 6
+    Priority: 0
+    Position: {x: 149.5, y: 366.5}
+    parameterJson: '{"ParameterList":[{"Name":"Key","Typename":"","Value":"TargetPoint"},{"Name":"Value","Typename":"","Value":"PointA"}]}'
+  - Guid: bde648a54b584932b0944fa8c79b7753
+    NodeType: 6
+    Priority: 0
+    Position: {x: 149.5, y: 665}
+    parameterJson: '{"ParameterList":[{"Name":"Key","Typename":"","Value":"TargetPoint"},{"Name":"Value","Typename":"","Value":"PointC"}]}'
+  - Guid: f4cc292e248347c9bd42959929169db4
+    NodeType: 7
+    Priority: 0
+    Position: {x: -159.5, y: 312}
+    parameterJson: 
+  - Guid: b2867a62dba84f5e8f6c676729c7bcae
+    NodeType: 8
+    Priority: 0
+    Position: {x: 309.5, y: 513.5}
+    parameterJson: 
+  - Guid: a30463788c914f1aa753640c1a20aaea
+    NodeType: 5
+    Priority: 200
+    Position: {x: 460.5, y: 366.5}
+    parameterJson: '{"ParameterList":[{"Name":"CheckType","Typename":"","Value":"3"},{"Name":"TargetName","Typename":"","Value":"TargetPoint"},{"Name":"Distance","Typename":"","Value":"0.3"}]}'
+  - Guid: 374f00371e894187a67ea8554d423729
+    NodeType: 2
+    Priority: 0
+    Position: {x: 662.5, y: 312}
+    parameterJson: '{"ParameterList":[{"Name":"Target","Typename":"","Value":"TargetPoint"}]}'
+  - Guid: 82f9e55cbbf14976a906aaa128e6ddff
+    NodeType: 3
+    Priority: 100
+    Position: {x: 460.5, y: 552}
+    parameterJson: '{"ParameterList":[{"Name":"Wait","Typename":"","Value":"3"}]}'
+  - Guid: c7c2f0bc010f4b99aa04d34bc2a2e961
+    NodeType: 7
+    Priority: 100
+    Position: {x: -14, y: 201}
+    parameterJson: 
+  - Guid: e9836f0c85434d0d833f22a8d6fa535a
+    NodeType: 9
+    Priority: 0
+    Position: {x: 347.5, y: 44}
+    parameterJson: '{"ParameterList":[{"Name":"Target","Typename":"","Value":"PlayerPos"},{"Name":"CoolTime","Typename":"","Value":"2"}]}'
+  - Guid: be76bf5090604c4f84b54d31bb5c1001
+    NodeType: 5
+    Priority: 100
+    Position: {x: 119.5, y: 201}
+    parameterJson: '{"ParameterList":[{"Name":"CheckType","Typename":"","Value":"1"},{"Name":"TargetName","Typename":"","Value":"PlayerPos"},{"Name":"Distance","Typename":"","Value":"4"}]}'
+  - Guid: 95f6a92f18ce496f9ff6e95cb7a7fd1c
+    NodeType: 2
+    Priority: 0
+    Position: {x: 347.5, y: 230.5}
+    parameterJson: '{"ParameterList":[{"Name":"Target","Typename":"","Value":"PlayerPos"}]}'
+  - Guid: f7a5ded9db6c4f08be1e4fe31c058ed9
+    NodeType: 5
+    Priority: 200
+    Position: {x: 119.5, y: -34}
+    parameterJson: '{"ParameterList":[{"Name":"CheckType","Typename":"","Value":"1"},{"Name":"TargetName","Typename":"","Value":"PlayerPos"},{"Name":"Distance","Typename":"","Value":"3.8"}]}'
+  Edges:
+  - fromNodeGuid: be76bf5090604c4f84b54d31bb5c1001
+    toNodeGuid: 95f6a92f18ce496f9ff6e95cb7a7fd1c
+  - fromNodeGuid: cc6db23176d04a49ac27171713eebd22
+    toNodeGuid: 412450511dc641618405a9aac42cd2fc
+  - fromNodeGuid: cc6db23176d04a49ac27171713eebd22
+    toNodeGuid: 5e28b824920b48869d9c553f4cb182a8
+  - fromNodeGuid: cc6db23176d04a49ac27171713eebd22
+    toNodeGuid: bde648a54b584932b0944fa8c79b7753
+  - fromNodeGuid: 31c536163d6e41fea69b595632d3f7af
+    toNodeGuid: f4cc292e248347c9bd42959929169db4
+  - fromNodeGuid: f4cc292e248347c9bd42959929169db4
+    toNodeGuid: cc6db23176d04a49ac27171713eebd22
+  - fromNodeGuid: 412450511dc641618405a9aac42cd2fc
+    toNodeGuid: b2867a62dba84f5e8f6c676729c7bcae
+  - fromNodeGuid: 5e28b824920b48869d9c553f4cb182a8
+    toNodeGuid: b2867a62dba84f5e8f6c676729c7bcae
+  - fromNodeGuid: bde648a54b584932b0944fa8c79b7753
+    toNodeGuid: b2867a62dba84f5e8f6c676729c7bcae
+  - fromNodeGuid: b2867a62dba84f5e8f6c676729c7bcae
+    toNodeGuid: a30463788c914f1aa753640c1a20aaea
+  - fromNodeGuid: a30463788c914f1aa753640c1a20aaea
+    toNodeGuid: 374f00371e894187a67ea8554d423729
+  - fromNodeGuid: b2867a62dba84f5e8f6c676729c7bcae
+    toNodeGuid: 82f9e55cbbf14976a906aaa128e6ddff
+  - fromNodeGuid: f4cc292e248347c9bd42959929169db4
+    toNodeGuid: c7c2f0bc010f4b99aa04d34bc2a2e961
+  - fromNodeGuid: c7c2f0bc010f4b99aa04d34bc2a2e961
+    toNodeGuid: be76bf5090604c4f84b54d31bb5c1001
+  - fromNodeGuid: c7c2f0bc010f4b99aa04d34bc2a2e961
+    toNodeGuid: f7a5ded9db6c4f08be1e4fe31c058ed9
+  - fromNodeGuid: f7a5ded9db6c4f08be1e4fe31c058ed9
+    toNodeGuid: e9836f0c85434d0d833f22a8d6fa535a
